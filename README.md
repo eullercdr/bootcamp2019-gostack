@@ -1,2 +1,4 @@
-# bootcamp2019-gostack
-Bootcamp2019 GoStack - Rockeseat
+# Comandos úteis
+Criar projeto node ```yarn -y```  
+Adicionar express ```yarn add express```  
+
