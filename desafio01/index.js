@@ -2,10 +2,8 @@ const express = require("express");
 const server = express();
 server.use(express.json());
 
-let contRequest = 0;
+let countRequest = 0;
 let projects = [];
-let project;
-let id;
 
 /*
 middleware que será utilizado em todas rotas que recebem o ID do projeto nos
@@ -14,8 +12,8 @@ middleware que será utilizado em todas rotas que recebem o ID do projeto nos
  continuar normalmente;
 */
 function verifyIdProject(req, res, next) {
-  id = req.params.id;
-  project = projects.find(p => p.id == id);
+  const { id } = req.params.id;
+  const { project } = projects.find(p => p.id == id);
   if (!project) {
     return res
       .status(400)
@@ -29,7 +27,7 @@ Middleware global chamado em todas requisições que imprime (console.log)
 uma contagem de quantas requisições foram feitas na aplicação até então;
 */
 server.use((req, res, next) => {
-  contRequest++;
+  countRequest++;
   console.log(`Foram realizadas ${contRequest} requisições`);
   return next();
 });
@@ -63,6 +61,7 @@ server.get("/projects", (req, res) => {
 nos parâmetros da rota;
 */
 server.put("/projects/:id", verifyIdProject, (req, res) => {
+  const { project } = projects.find(p => p.id == id);
   const { title } = req.body;
   project.title = title;
   return res.json(projects);
@@ -70,6 +69,7 @@ server.put("/projects/:id", verifyIdProject, (req, res) => {
 
 //A rota deve deletar o projeto com o id presente nos parâmetros da rota;
 server.delete("/projects/:id", verifyIdProject, (req, res) => {
+  const { project } = projects.find(p => p.id == id);
   projects.splice(project, 1);
   return res.send();
 });
@@ -80,7 +80,11 @@ tarefas de um projeto específico escolhido através do id presente nos
 parâmetros da rota;
 */
 server.post("/projects/:id/tasks", (req, res) => {
-  const { id } = req.params;
+  const { project } = projects.find(p => p.id == id);
+  const { title, tarefa } = req.body;
+
+  project.title = title;
+  project.tarefa.push(tarefa);
 });
 
 server.listen(3000);
