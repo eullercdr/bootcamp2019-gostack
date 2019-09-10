@@ -28,3 +28,6 @@ yarn add jsonwebtoken
 
 #validacoes
 yarn add yup
+
+#upload
+yarn add multer
